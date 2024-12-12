@@ -56,3 +56,6 @@ CMakeFiles/
 Makefile
 cmake_install.cmake
 libssh2-list-ciphers
+builddir
+out
+*.deb
