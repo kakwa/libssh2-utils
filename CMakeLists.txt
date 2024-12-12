@@ -23,3 +23,10 @@ target_link_libraries(libssh2-list-ciphers ${SSH2_LIBRARY})
 
 # Add compile options (optional, useful for warnings)
 target_compile_options(libssh2-list-ciphers PRIVATE ${SSH2_CFLAGS_OTHER})
+
+# install binaries and library
+install(
+  TARGETS libssh2-list-ciphers
+  RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
