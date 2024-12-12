@@ -6,7 +6,8 @@ Build-Depends:
  debhelper (>= 7.0.50~),
  rsync,
  cmake,
- libssh2-1-dev,
+ cmake-data,
+ libssh2-1-dev
 Standards-Version: 3.8.4
 Homepage: @URL@ 
 X-Python-Version: >= 2.5
