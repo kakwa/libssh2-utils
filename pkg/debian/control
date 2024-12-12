@@ -1,0 +1,18 @@
+Source: @NAME@
+Section: misc
+Priority: extra
+Maintainer: @MAINTAINER@ <@MAINTAINER_EMAIL@>
+Build-Depends:
+ debhelper (>= 7.0.50~),
+ rsync,
+ cmake,
+ libssh2-1-dev,
+Standards-Version: 3.8.4
+Homepage: @URL@ 
+X-Python-Version: >= 2.5
+
+Package: @NAME@
+Architecture: amd64 i386 powerpc armhf arm64
+Depends: ${misc:Depends}, libssh2-1
+Description: @SUMMARY@
+ @DESCRIPTION@
