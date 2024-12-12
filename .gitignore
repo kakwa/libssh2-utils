@@ -58,4 +58,5 @@ cmake_install.cmake
 libssh2-list-ciphers
 builddir
 out
+src-out
 *.deb
