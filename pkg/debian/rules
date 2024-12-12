@@ -14,3 +14,5 @@ DEST=$$(pwd)/debian/@NAME@
 %:
 	dh $@
 
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip
