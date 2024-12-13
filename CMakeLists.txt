@@ -12,7 +12,9 @@ set(CMAKE_C_STANDARD 11)
 find_package(SSH2 REQUIRED)
 
 if(NOT SSH2_FOUND)
-    message(FATAL_ERROR "Could not find SSH2, please install libssh2-1-dev or equivalent package")
+  message(
+    FATAL_ERROR
+      "Could not find SSH2, please install libssh2-1-dev or equivalent package")
 endif()
 
 # Include the directories for libssh2
@@ -50,5 +52,4 @@ install(
   TARGETS ${EXECUTABLE_TARGETS}
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
-)
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
