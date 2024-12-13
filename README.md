@@ -19,12 +19,12 @@ make
 
 ## Run
 
-Ciphers listing
+Local libssh2 ciphers listing:
 ```bash
 ./libssh2-list-ciphers
 ```
 
-Simple cipher negociation test
+Cipher negociation test with a remote server:
 ```bash
 ./libssh2-test-remote-cipher-exchange --url ssh://user@localhost:22
 ```
