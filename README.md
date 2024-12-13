@@ -2,8 +2,6 @@
 
 Utilities for libssh2
 
-For now, fairly limited, just a list-ciphers utility.
-
 # Build
 
 ## Dependencies
@@ -21,6 +19,12 @@ make
 
 ## Run
 
+Ciphers listing
 ```bash
 ./libssh2-list-ciphers
+```
+
+Simple cipher negociation test
+```bash
+./libssh2-test-remote-cipher-exchange --url ssh://user@localhost:22
 ```
