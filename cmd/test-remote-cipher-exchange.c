@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--url") == 0 && i + 1 < argc) {
             url = argv[++i];
-		}
+        }
     }
 
     if (!url) {
@@ -100,7 +100,9 @@ int main(int argc, char *argv[]) {
 
     LIBSSH2_SESSION *session = libssh2_session_init();
     libssh2_trace_sethandler(session, NULL, custom_trace_handler);
-    libssh2_trace(session, LIBSSH2_TRACE_SOCKET | LIBSSH2_TRACE_TRANS | LIBSSH2_TRACE_KEX | LIBSSH2_TRACE_AUTH |LIBSSH2_TRACE_CONN | LIBSSH2_TRACE_SCP | LIBSSH2_TRACE_SFTP | LIBSSH2_TRACE_ERROR | LIBSSH2_TRACE_PUBLICKEY);
+    libssh2_trace(session, LIBSSH2_TRACE_SOCKET | LIBSSH2_TRACE_TRANS | LIBSSH2_TRACE_KEX | LIBSSH2_TRACE_AUTH |
+                               LIBSSH2_TRACE_CONN | LIBSSH2_TRACE_SCP | LIBSSH2_TRACE_SFTP | LIBSSH2_TRACE_ERROR |
+                               LIBSSH2_TRACE_PUBLICKEY);
     if (!session) {
         fprintf(stderr, "Failed to create SSH session\n");
         close(sock);
@@ -112,7 +114,7 @@ int main(int argc, char *argv[]) {
         char *err_msg;
         libssh2_session_last_error(session, &err_msg, NULL, 0);
         fprintf(stderr, "SSH session handshake failed: %s\n", err_msg);
-    	print_supported_ciphers(session);
+        print_supported_ciphers(session);
         libssh2_session_free(session);
         close(sock);
         libssh2_exit();
