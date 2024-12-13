@@ -18,21 +18,37 @@ endif()
 # Include the directories for libssh2
 include_directories(${SSH2_INCLUDE_DIRS})
 
-# Add the executable
-add_executable(libssh2-list-ciphers list-ciphers.c)
+# Define the directory containing the source files
+set(CMD_DIR "${CMAKE_SOURCE_DIR}/cmd")
 
-# Link the libssh2 library
-target_link_libraries(libssh2-list-ciphers ${SSH2_LIBRARY})
+# Glob all .c files in the cmd directory
+file(GLOB CMD_SOURCES "${CMD_DIR}/*.c")
 
-# Add the executable
-add_executable(libssh2-test-remote-cipher-exchange test-remote-cipher-exchange.c)
-# Link the libssh2 library
-target_link_libraries(libssh2-test-remote-cipher-exchange ${SSH2_LIBRARY})
+# Initialize a list to hold the executable targets
+set(EXECUTABLE_TARGETS)
 
+# Iterate over each source file
+foreach(SOURCE_FILE ${CMD_SOURCES})
+  # Get the filename without the directory and extension
+  get_filename_component(EXEC_NAME ${SOURCE_FILE} NAME_WE)
 
-# install binaries and library
+  # Prepend 'libssh2-' to the executable name
+  set(EXEC_NAME "libssh2-${EXEC_NAME}")
+
+  # Add the executable
+  add_executable(${EXEC_NAME} ${SOURCE_FILE})
+
+  # Link the libssh2 library
+  target_link_libraries(${EXEC_NAME} ${SSH2_LIBRARY})
+
+  # Add the executable to the list of targets
+  list(APPEND EXECUTABLE_TARGETS ${EXEC_NAME})
+endforeach()
+
+# Install the executables
 install(
-  TARGETS libssh2-list-ciphers libssh2-test-remote-cipher-exchange
+  TARGETS ${EXECUTABLE_TARGETS}
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-  ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+)
