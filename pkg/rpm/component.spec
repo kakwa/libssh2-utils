@@ -12,8 +12,8 @@ Group: System/Servers
 Summary: @SUMMARY@ 
 BuildRoot: %{_tmppath}/%{pkgname}-%{zone}-%{version}-%{release}-build
 #BuildArch: noarch
-BuildRequires: cmake, openssl-devel, libcivetweb-devel
-Requires: openssl-libs, libcivetweb
+BuildRequires: cmake, libssh2-devel, gcc, g++
+Requires: libssh2
 
 %description
 @DESCRIPTION@
