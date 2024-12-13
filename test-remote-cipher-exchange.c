@@ -8,19 +8,19 @@
 #include <netdb.h>
 #include <dlfcn.h>
 
-void print_supported_ciphers(LIBSSH2_SESSION *session, const char *direction) {
-    const char **ciphers;
-    int num_ciphers = libssh2_session_supported_algs(session, LIBSSH2_METHOD_KEX, &ciphers);
+void get_cipher(LIBSSH2_SESSION *session, int method_type, const char *direction) {
+    const char *cipher = libssh2_session_methods(session, method_type);
+    printf("Negociated %s cipher: %s\n", direction, cipher);
+}
 
-    if (num_ciphers < 0) {
-        fprintf(stderr, "Failed to get supported ciphers for %s\n", direction);
-        return;
-    }
-
-    printf("Supported %s ciphers:\n", direction);
-    for (int i = 0; i < num_ciphers; i++) {
-        printf("  %s\n", ciphers[i]);
-    }
+void print_supported_ciphers(LIBSSH2_SESSION *session) {
+    // Iterate through all method types
+    get_cipher(session, LIBSSH2_METHOD_KEX, "key exchange (KEX)");
+    get_cipher(session, LIBSSH2_METHOD_HOSTKEY, "host key");
+    get_cipher(session, LIBSSH2_METHOD_CRYPT_CS, "encryption (client-to-server)");
+    get_cipher(session, LIBSSH2_METHOD_CRYPT_SC, "encryption (server-to-client)");
+    get_cipher(session, LIBSSH2_METHOD_MAC_CS, "MAC (client-to-server)");
+    get_cipher(session, LIBSSH2_METHOD_MAC_SC, "MAC (server-to-client)");
 }
 
 int connect_to_server(const char *host, int port) {
@@ -62,30 +62,9 @@ void custom_trace_handler(LIBSSH2_SESSION *session, void *context, const char *d
     printf("%s\n", data);
 }
 
-int
-_libssh2_kex_exchange(LIBSSH2_SESSION * session, int reexchange,
-                      void * key_state);
-
 int main(int argc, char *argv[]) {
-    void *handle = dlopen("/usr/lib/x86_64-linux-gnu/libssh2.so.1.0.1", RTLD_LAZY | RTLD_LOCAL);
-    if (!handle) {
-        fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return 1;
-    }
-
-    // Try to fetch a private symbol (if you know its mangled name)
-    void (*private_func)() = dlsym(handle, "_libssh2_match_string");
-    if (!private_func) {
-        fprintf(stderr, "dlsym failed: %s\n", dlerror());
-    } else {
-        private_func();
-    }
-
-    dlclose(handle);
-    return 0;
-
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s --url ssh://user@host:port [--key private_key_path] [--passphrase passphrase]\n", argv[0]);
+        fprintf(stderr, "Usage: %s --url ssh://user@host:port\n", argv[0]);
         return 1;
     }
 
@@ -93,11 +72,7 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--url") == 0 && i + 1 < argc) {
             url = argv[++i];
-        } else if (strcmp(argv[i], "--key") == 0 && i + 1 < argc) {
-            key = argv[++i];
-        } else if (strcmp(argv[i], "--passphrase") == 0 && i + 1 < argc) {
-            passphrase = argv[++i];
-        }
+		}
     }
 
     if (!url) {
@@ -133,35 +108,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    _libssh2_kex_exchange(session, 0, NULL);
     if (libssh2_session_handshake(session, sock)) {
-                char *err_msg;
-
-                libssh2_session_last_error(session, &err_msg, NULL, 0);
+        char *err_msg;
+        libssh2_session_last_error(session, &err_msg, NULL, 0);
         fprintf(stderr, "SSH session handshake failed: %s\n", err_msg);
+    	print_supported_ciphers(session);
         libssh2_session_free(session);
         close(sock);
         libssh2_exit();
         return 1;
     }
 
-    if (key) {
-        if (libssh2_userauth_publickey_fromfile(session, user, key, NULL, passphrase)) {
-            fprintf(stderr, "Authentication with private key failed\n");
-            libssh2_session_disconnect(session, "Authentication failed");
-            libssh2_session_free(session);
-            close(sock);
-            libssh2_exit();
-            return 1;
-        }
-    } else {
-        fprintf(stderr, "No key provided. Only performing handshake.\n");
-    }
-
-    print_supported_ciphers(session, "client-to-server");
-    print_supported_ciphers(session, "server-to-client");
-
     libssh2_session_disconnect(session, "Normal Shutdown");
+    print_supported_ciphers(session);
     libssh2_session_free(session);
     close(sock);
     libssh2_exit();
