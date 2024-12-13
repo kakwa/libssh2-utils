@@ -43,13 +43,6 @@ int main() {
     list_supported_algorithms(session, LIBSSH2_METHOD_CRYPT_SC, "encryption (server-to-client)");
     list_supported_algorithms(session, LIBSSH2_METHOD_MAC_CS, "MAC (client-to-server)");
     list_supported_algorithms(session, LIBSSH2_METHOD_MAC_SC, "MAC (server-to-client)");
-    list_supported_algorithms(session, LIBSSH2_METHOD_COMP_CS, "compression (client-to-server)");
-    list_supported_algorithms(session, LIBSSH2_METHOD_COMP_SC, "compression (server-to-client)");
-    list_supported_algorithms(session, LIBSSH2_METHOD_LANG_CS, "language (client-to-server)");
-    list_supported_algorithms(session, LIBSSH2_METHOD_LANG_SC, "language (server-to-client)");
-#ifdef LIBSSH2_METHOD_SIGN_ALGO
-    list_supported_algorithms(session, LIBSSH2_METHOD_SIGN_ALGO, "signature algorithm");
-#endif
 
     // Cleanup session
     libssh2_session_free(session);

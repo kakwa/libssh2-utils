@@ -7,9 +7,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 # Specify the C standard
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED True)
-set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 # Find the libssh2 library
 find_package(SSH2 REQUIRED)
@@ -28,14 +25,14 @@ add_executable(libssh2-list-ciphers list-ciphers.c)
 target_link_libraries(libssh2-list-ciphers ${SSH2_LIBRARY})
 
 # Add the executable
-add_executable(libssh2-remote-ciphers remote-ciphers.c)
+add_executable(libssh2-test-remote-cipher-exchange test-remote-cipher-exchange.c)
 # Link the libssh2 library
-target_link_libraries(libssh2-remote-ciphers ${SSH2_LIBRARY})
+target_link_libraries(libssh2-test-remote-cipher-exchange ${SSH2_LIBRARY})
 
 
 # install binaries and library
 install(
-  TARGETS libssh2-list-ciphers libssh2-remote-ciphers
+  TARGETS libssh2-list-ciphers libssh2-test-remote-cipher-exchange
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR})
