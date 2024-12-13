@@ -13,7 +13,7 @@ Homepage: @URL@
 X-Python-Version: >= 2.5
 
 Package: @NAME@
-Architecture: amd64 i386 powerpc armhf arm64
+Architecture: any
 Depends: ${misc:Depends}, libssh2-1
 Description: @SUMMARY@
  @DESCRIPTION@
