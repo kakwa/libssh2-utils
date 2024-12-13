@@ -37,5 +37,11 @@ include buildenv/Makefile.common
 
 $(SOURCE_ARCHIVE): $(SOURCE_DIR) $(CACHE) Makefile MANIFEST
 	rm -rf $(SOURCE_DIR)
-	rsync -ap --ignore-errors --force --exclude pkg ../ $(SOURCE_DIR)
+	rsync -ap --ignore-errors --force --exclude pkg \
+		--exclude CMakeFiles \
+		--exclude Makefile  \
+		--exclude libssh2-*  \
+		--exclude CMakeCache.txt  \
+		--exclude cmake_install.cmake  \
+		../ $(SOURCE_DIR)
 	$(SOURCE_TAR_CMD)
