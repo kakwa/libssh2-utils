@@ -1,6 +1,8 @@
 # libssh2-utils
 
-Utilities for libssh2
+Basic utilities for libssh2:
+* **libssh2-list-ciphers**: list the supported ciphers by libssh2 on your host
+* **libssh2-test-remote-cipher-exchange**: test cipher negociation with a remote server.
 
 # Build
 
